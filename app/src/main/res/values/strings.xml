@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">TJ\'s IllumiWax</string>
+    <string name="tj_s_illumiwax">TJ\'s IllumiWax</string>
+    <string name="login">login</string>
+    <string name="signup">signup</string>
+    <string name="get_started">get started</string>
+    <string name="tj_s_candle_co">TJ\'s Candle Co.</string>
+    <string name="todo">TODO</string>
+    <string name="get_started1">get started</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="password">Password</string>
+    <string name="submit">submit</string>
+    <string name="pass">********</string>
+    <string name="header">Login</string>
+    <string name="btnlogin">Login</string>
+    <string name="forgotpass">Forgot Password?</string>
+    <string name="dont_have_an_account">Dont have an account?</string>
+    <string name="sign_up">Signup</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="btn">Button</string>
+    <string name="descp">TextView</string>
+    <string name="cat_img">TODO</string>
+    <string name="label">TextView</string>
+    <string name="cat_img_">TODO</string>
+</resources>
