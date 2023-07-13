@@ -10,20 +10,21 @@
         android:id="@+id/cat_image"
         android:layout_width="98dp"
         android:layout_height="68dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:contentDescription="@string/cat_img_"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:riv_oval="true"
-        app:srcCompat="@drawable/img_6" />
+        android:src="@drawable/img"/>
 
     <TextView
         android:id="@+id/cat_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-black"
         android:text="@string/label"
         app:layout_constraintEnd_toEndOf="@+id/cat_image"
         app:layout_constraintStart_toStartOf="@+id/cat_image"

@@ -21,9 +21,15 @@
     <string name="sign_up">Signup</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
+    <string name="price_label">PKR %.2f</string>
+
     <string name="btn">Button</string>
     <string name="descp">TextView</string>
     <string name="cat_img">TODO</string>
     <string name="label">TextView</string>
     <string name="cat_img_">TODO</string>
+    <string name="productname">TextView</string>
+    <string name="pricetag">PKR 3300</string>
+    <string name="product_img">TODO</string>
+    <string name="best_sellers">Best Sellers</string>
 </resources>

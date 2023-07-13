@@ -7,7 +7,7 @@ public class Cateogry {
     public Cateogry(String name, String icon, String color, String brief, int id)
     {
         this.name=name;
-        this.icon=icon;
+        this.icon= icon;
         this.color=color;
         this.brief=brief;
         this.id=id;
