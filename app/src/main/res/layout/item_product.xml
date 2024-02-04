@@ -19,6 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:cardBackgroundColor="@color/lightgreen"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -41,7 +42,9 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:text="@string/productname" />
+                android:fontFamily="sans-serif-black"
+                android:text="@string/productname"
+                android:textColor="#191818" />
 
             <TextView
                 android:id="@+id/Price_tag"
@@ -51,7 +54,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="5dp"
                 android:fontFamily="sans-serif-black"
-                android:text="@string/pricetag" />
+                android:text="@string/pricetag"
+                android:textColor="#201E1E" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

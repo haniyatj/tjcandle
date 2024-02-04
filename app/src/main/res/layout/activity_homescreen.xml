@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".homescreen"
+    tools:openDrawer="start">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/Product"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background"
     tools:context=".homescreen">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,9 +38,9 @@
                 android:layout_height="wrap_content"
                 app:mt_hint="Search your fav scent!"
                 app:mt_maxSuggestionsCount="10"
-                app:mt_speechMode="true"
+                app:mt_navIconEnabled="true"
                 app:mt_placeholder="TJ'S Milkjar"
-                app:mt_navIconEnabled="true"/>
+                app:mt_speechMode="true" />
 
             <com.codebyashish.autoimageslider.AutoImageSlider
                 android:id="@+id/autoImageSlider"
@@ -51,6 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:elevation="100dp"
+                app:cardBackgroundColor="@color/lightgreen"
                 app:cardCornerRadius="10dp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -59,6 +72,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:background="@color/lightgreen"
                     android:padding="10dp"
                     android:paddingTop="40dp">
 
@@ -69,7 +83,7 @@
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
-                android:layout_height="81dp"
+                android:layout_height="70dp"
                 android:fontFamily="@font/bambi"
                 android:gravity="center"
                 android:paddingLeft="20dp"
@@ -77,18 +91,31 @@
                 android:paddingRight="20dp"
                 android:paddingBottom="20dp"
                 android:text="@string/best_sellers"
+                android:textColor="#403C3C"
                 android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Productlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp" />
+                android:paddingTop="2dp" />
+
 
 
         </LinearLayout>
 
-
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- NavigationView -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/menu_"
+        android:fitsSystemWindows="true"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -4,6 +4,9 @@ public class Cateogry {
    private String name,brief,icon,color;
     private int id;
 
+    public Cateogry() {
+        // Empty constructor required for Firebase serialization
+    }
     public Cateogry(String name, String icon, String color, String brief, int id)
     {
         this.name=name;

@@ -1,31 +1,42 @@
 package com.example.tjsillumiwax;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.codebyashish.autoimageslider.AutoImageSlider;
 import com.codebyashish.autoimageslider.Enums.ImageScaleType;
 import com.codebyashish.autoimageslider.ExceptionsClass;
-import com.codebyashish.autoimageslider.Interfaces.ItemsListener;
 import com.codebyashish.autoimageslider.Models.ImageSlidesModel;
 import com.example.tjsillumiwax.Adaptors.Category_adaptor;
 import com.example.tjsillumiwax.Adaptors.Product_adaptor;
 import com.example.tjsillumiwax.Models.Cateogry;
 import com.example.tjsillumiwax.Models.Product;
 import com.example.tjsillumiwax.databinding.ActivityHomescreenBinding;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
 
 public class homescreen extends AppCompatActivity {
 
     ActivityHomescreenBinding binding;
-        Category_adaptor categoryAdaptor;
-        ArrayList<Cateogry> categories;
-
-        Product_adaptor productAdaptor;
-        ArrayList<Product> products;
 
 
     @Override
@@ -34,12 +45,70 @@ public class homescreen extends AppCompatActivity {
         binding=ActivityHomescreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        DrawerLayout drawerLayout=findViewById(R.id.drawerLayout);
+
+        NavigationView navigationView=findViewById(R.id.navigationView);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+
+        binding.searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                Intent intent = new Intent(homescreen.this, SearchActivity.class);
+                intent.putExtra("query", text.toString());
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+                if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
+                    // Toggle the navigation drawer state (show/hide)
+                    if (!drawerLayout.isDrawerOpen(GravityCompat.START)) //if drawer closed, it will open
+                    {
+                        drawerLayout.openDrawer(GravityCompat.START);
+                    }
+                }
+
+            }
+
+        });
+
+        // Set navigation item selected listener
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.shop) {
+                    Intent intent = new Intent(homescreen.this,Factory.class);
+                    startActivity(intent);
+                }
+
+                else if (id==R.id.about)
+                {
+                    Intent intent = new Intent(homescreen.this, About.class);
+                    startActivity(intent);
+                }
+                // Return true to indicate that the item has been handled
+                return true;
+            }
+        });
+
+
+        // Call syncState to synchronize the drawer indicator icon with the current drawer state
+                actionBarDrawerToggle.syncState();
+
 
         //create list for images
         ArrayList<ImageSlidesModel> slidesModels=new ArrayList<>();
-
         AutoImageSlider autoImageSlider=findViewById(R.id.autoImageSlider);
-
 
         try {
             slidesModels.add(new ImageSlidesModel(R.drawable.img_9, ImageScaleType.FIT));
@@ -56,47 +125,96 @@ public class homescreen extends AppCompatActivity {
         categ();
         product();
 
+        Toast.makeText(homescreen.this,"connection succes",Toast.LENGTH_LONG).show();
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+
+
+
 
     }
 
     void categ()
     {
+        RecyclerView recyclerView;
+        DatabaseReference database;
+        Category_adaptor categoryAdaptor;
+        ArrayList<Cateogry> categories;
+
+
+        recyclerView=(RecyclerView)findViewById(R.id.categories_list);
+        database= FirebaseDatabase.getInstance().getReference().child("categories");
+        //recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         categories=new ArrayList<>();
-
         categoryAdaptor=new Category_adaptor(this,categories);
-        categories.add(new Cateogry("Jar Candles","https://cdn.sanity.io/images/w4a0o3t9/development/3954ad2eb01beb1298071720870a7f3176d891e2-3297x3297.jpg?w=1080&fit=max&auto=format&h=1080","#F5EBE0","lol",1));
-        categories.add(new Cateogry("Diffusers","https://cdn.sanity.io/images/w4a0o3t9/development/9de0056c02429ad27953ee666565db7e31a15fea-3160x3160.jpg?w=1080&fit=max&auto=format&h=1080","#F5EBE0","lol",1));
-        categories.add(new Cateogry("Bundles","https://cdn.sanity.io/images/w4a0o3t9/development/d61dfe03f3998698f7f447cb847cf240516649cc-3052x3052.jpg?w=1080&fit=max&auto=format&h=1080","#F5EBE0","lol",1));
 
 
-        GridLayoutManager layoutManager= new GridLayoutManager(this,3);
-        binding.categoriesList.setLayoutManager(layoutManager);
-        binding.categoriesList.setAdapter(categoryAdaptor);
+        // Use GridLayoutManager with span count of 2
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setAdapter(categoryAdaptor);
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Cateogry cateogry=dataSnapshot.getValue(Cateogry.class);
+                    categories.add(cateogry);
+
+                }
+                categoryAdaptor.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
     }
 
     void product()
     {
-        products=new ArrayList<>();
+        RecyclerView recyclerView;
+        DatabaseReference database;
+        ArrayList<Product> list;
+        Product_adaptor myadaptor;
+
+        recyclerView=(RecyclerView)findViewById(R.id.Productlist);
+        database= FirebaseDatabase.getInstance().getReference().child("bestsellers");
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        list=new ArrayList<>();
+        myadaptor=new Product_adaptor(this,list);
 
 
-        products.add(new Product("Dandy","https://cdn.sanity.io/images/w4a0o3t9/development/dad62412a13d9df2e6a85d5d9959968750fbc36b-3378x3378.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
-        products.add(new Product("Bohemia","https://cdn.sanity.io/images/w4a0o3t9/development/b665691a428aff473619a41c55502a116f1c1ed9-3378x3378.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
-        products.add(new Product("Lemonade","https://cdn.sanity.io/images/w4a0o3t9/development/3285c517336df8974e3cfc83b864612532853728-3378x3378.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
-        products.add(new Product("Fresh Laundry","https://cdn.sanity.io/images/w4a0o3t9/development/c7e06277a93d2a063270087239432fa05783e02e-3408x3408.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
+        // Use GridLayoutManager with span count of 2
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(myadaptor);
 
-        products.add(new Product("Sunny Side","https://cdn.sanity.io/images/w4a0o3t9/development/3954ad2eb01beb1298071720870a7f3176d891e2-3297x3297.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
-        products.add(new Product("Hygge","https://cdn.sanity.io/images/w4a0o3t9/development/979ab88e6d2089e35831a522818a35683ca5451d-3223x3223.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
-        products.add(new Product("Aurora","https://cdn.sanity.io/images/w4a0o3t9/development/ef4600ac43a58ea6add16b4bc253e1126059c06e-3378x3378.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
-        products.add(new Product("Moon rise","https://cdn.sanity.io/images/w4a0o3t9/development/d405cb2ff0bd1f2d3e3f11184571c99a42e04f6d-3314x3314.jpg?w=1080&fit=max&auto=format&h=1080","in stock",2000.0,1,33,10));
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Product product=dataSnapshot.getValue(Product.class);
+                    list.add(product);
 
+                }
+                myadaptor.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        productAdaptor=new Product_adaptor(this,products);
-        GridLayoutManager layoutManager= new GridLayoutManager(this,2);
-        binding.Productlist.setLayoutManager(layoutManager);
-        binding.Productlist.setAdapter(productAdaptor);
-
+            }
+        });
 
 
     }

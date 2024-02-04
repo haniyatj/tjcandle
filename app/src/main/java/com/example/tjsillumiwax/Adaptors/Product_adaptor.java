@@ -3,6 +3,7 @@ package com.example.tjsillumiwax.Adaptors;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import java.util.ArrayList;
 import com.example.tjsillumiwax.Models.Product;
 import com.example.tjsillumiwax.R;
 import com.example.tjsillumiwax.databinding.ItemProductBinding;
+
+import com.example.tjsillumiwax.product_details;
+
 
 public class Product_adaptor extends RecyclerView.Adapter<Product_adaptor.ProductViewHolder> {
 
@@ -54,6 +58,31 @@ public class Product_adaptor extends RecyclerView.Adapter<Product_adaptor.Produc
                 .into(holder.binding.ProductImg);
         holder.binding.productName.setText(product.getName());
         holder.binding.PriceTag.setText(context.getString(R.string.price_label,product.getPrice()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, product_details.class);
+                intent.putExtra("name",product.getName());/*extra data can be retrieved in the product_details activity using the same key, "name", to access the value associated with it.*/
+                intent.putExtra("image",product.getImg());
+                intent.putExtra("price",product.getPrice());
+                intent.putExtra("id",product.getId());
+                intent.putExtra("des",product.getDes());
+                intent.putExtra("scent",product.getScent());
+                intent.putExtra("status",product.getStatus());
+                intent.putExtra("discount",product.getDiscount());
+                intent.putExtra("stock",product.getStock());
+                intent.putExtra("quantity",product.getQuantity());
+
+
+
+
+
+
+
+                context.startActivity(intent); // to start the activity
+
+            }
+        });
 
     }
 
@@ -62,7 +91,7 @@ public class Product_adaptor extends RecyclerView.Adapter<Product_adaptor.Produc
         return products.size();
     }
 
-
-
-
 }
+
+
+

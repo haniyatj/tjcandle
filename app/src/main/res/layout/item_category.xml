@@ -26,6 +26,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/label"
+        android:textColor="#3E3C3C"
         app:layout_constraintEnd_toEndOf="@+id/cat_image"
         app:layout_constraintStart_toStartOf="@+id/cat_image"
         app:layout_constraintTop_toBottomOf="@+id/cat_image" />
