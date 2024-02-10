@@ -125,7 +125,7 @@ public class homescreen extends AppCompatActivity {
         categ();
         product();
 
-        Toast.makeText(homescreen.this,"connection succes",Toast.LENGTH_LONG).show();
+        //Toast.makeText(homescreen.this,"connection succes",Toast.LENGTH_LONG).show();
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
 
